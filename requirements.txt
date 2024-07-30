@@ -1,0 +1,8 @@
+python==3.10.13
+tokenizers==0.19.1
+datasets==2.20.0
+evaluate==0.4.2
+rouge_score==0.1.2
+huggingface_hub==0.24.3
+transformers[torch]==4.43.3
+emoji==2.12.1
