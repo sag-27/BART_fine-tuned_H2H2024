@@ -39,7 +39,7 @@ ROUGE (Recall-Oriented Understudy for Gisting Evaluation)
 
 
 ## Installation
-To set up the environment, you can use the `requirements.txt` file provided. Here are the steps:
+To set up the environment, you can use the [`requirements.txt`](https://github.com/sag-27/BART_fine-tuned_H2H2024/blob/main/requirements.txt) file provided. Here are the steps:
 
 1. **Clone the repository**:
     ```sh
@@ -59,6 +59,34 @@ To set up the environment, you can use the `requirements.txt` file provided. Her
     pip install -r requirements.txt
     ```
 
+
+## Script
+
+The entire Python script can be found in [`script.ipynb`](https://github.com/sag-27/BART_fine-tuned_H2H2024/blob/main/script.ipynb). 
+Few test queston have been tested at the end of the script.
+
+## Results
+
+The model results are contained in [`fine-tuned-bart.zip`](https://github.com/sag-27/BART_fine-tuned_H2H2024/blob/main/fine-tuned-bart.zip).
+To test the model performance, follow the following lines of code:
+
+1. **Import the Libraries**:
+    ```sh
+    from transformers import BartTokenizer, BartForConditionalGeneration
+    ```
+
+2. **Load the model**:
+   
+    ```sh
+    model = BartForConditionalGeneration.from_pretrained("/kaggle/input/fine-tuned-bart")
+    ```
+    
+3. **Load the tokenizer**:
+   
+    ```sh
+    tokenizer = BartTokenizer.from_pretrained("/kaggle/input/fine-tuned-bart")
+    ```
+    
 ## Report
 
-The link to the detailed report can be found
+The link to the detailed report can be found here - [`report`](https://github.com/sag-27/BART_fine-tuned_H2H2024/blob/main/Report.pdf)
