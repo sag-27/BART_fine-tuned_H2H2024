@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chat Application</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Lato:wght@400;700&display=swap');
+
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            background-color: #f0f0f0;
+            font-family: 'Lato', sans-serif;
+        }
+        .chat-container {
+            display: flex;
+            flex-direction: column;
+            position: relative;
+            width: 70%;
+            max-width: 800px;
+            height: 70%;
+            background-color: white;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+        }
+        .chat-container::before {
+            content: '';
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            right: 10px;
+            bottom: 10px;
+            background-color: #d3d3d3;
+            border-radius: 10px;
+            z-index: -1;
+        }
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px 20px;
+            background-color: #0033a0;
+            border-top-left-radius: 10px;
+            border-top-right-radius: 10px;
+        }
+        .header h1 {
+            margin: 0;
+            color: white;
+            font-weight: 700;
+            letter-spacing: 0.2em; /* Adjust the spacing between letters */
+        }
+        .header .close-btn {
+            cursor: pointer;
+            font-size: 1.5em;
+            color: white;
+        }
+        .chat-box {
+            display: flex;
+            flex-direction: column;
+            padding: 20px;
+            height: calc(100% - 70px); /* Adjusted height to ensure the input container is visible */
+            overflow-y: auto;
+            background-color: white;
+        }
+        .chat-message {
+            max-width: 70%;
+            margin-bottom: 10px;
+            padding: 10px;
+            border-radius: 10px;
+            color: white;
+            word-wrap: break-word;
+            overflow-wrap: break-word;
+            white-space: pre-wrap;
+        }
+        .chat-message.user {
+            background-color: #ffcc00;
+            align-self: flex-end;
+            color: black;
+        }
+        .chat-message.bot {
+            background-color: #0033a0;
+            align-self: flex-start;
+        }
+        .input-container {
+            display: flex;
+            padding: 10px 20px;
+            border-top: 1px solid #ccc;
+            background-color: white;
+            border-bottom-left-radius: 10px;
+            border-bottom-right-radius: 10px;
+        }
+        .input-container input[type="text"] {
+            flex-grow: 1;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+        .input-container button {
+            margin-left: 10px;
+            padding: 10px;
+            border: none;
+            background-color: #ffcc00;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    <div class="chat-container">
+        <div class="header">
+            <h1>AERO</h1>
+            <span class="close-btn" onclick="closeApp()">X</span>
+        </div>
+        <div class="chat-box" id="chat-box">
+            <!-- Chat messages will be appended here -->
+        </div>
+        <div class="input-container">
+            <input type="text" id="input-text" placeholder="Type your message here...">
+            <button onclick="sendMessage()">&#9658;</button>
+        </div>
+    </div>
+
+    <script>
+        function closeApp() {
+            // Send a shutdown request to the server
+            fetch('/shutdown', { method: 'POST' }).then(response => response.json()).then(data => {
+                if (data.status === 'success') {
+                    window.close();  // Attempt to close the browser window
+                    if (navigator.userAgent.indexOf('Edge') !== -1) {
+                        alert("Please manually close the browser window.");
+                    }
+                }
+            });
+        }
+
+        function sendMessage() {
+            const input = document.getElementById('input-text');
+            const message = input.value;
+            if (message.trim() === '') return;
+
+            // Append user's message to the chat box
+            const userMessage = document.createElement('div');
+            userMessage.classList.add('chat-message', 'user');
+            userMessage.textContent = message;
+            document.getElementById('chat-box').appendChild(userMessage);
+
+            // Clear the input field
+            input.value = '';
+
+            // Scroll to the bottom of the chat box
+            document.getElementById('chat-box').scrollTop = document.getElementById('chat-box').scrollHeight;
+
+            // Send the message to the server
+            fetch('/generate', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ input_text: message })
+            })
+            .then(response => response.json())
+            .then(data => {
+                const botMessage = document.createElement('div');
+                botMessage.classList.add('chat-message', 'bot');
+                botMessage.textContent = data.response;
+                document.getElementById('chat-box').appendChild(botMessage);
+
+                // Scroll to the bottom of the chat box
+                document.getElementById('chat-box').scrollTop = document.getElementById('chat-box').scrollHeight;
+            });
+        }
+
+        // Listen for Enter key press
+        document.getElementById('input-text').addEventListener('keydown', function (e) {
+            if (e.key === 'Enter') {
+                sendMessage();
+            }
+        });
+    </script>
+</body>
+</html>
