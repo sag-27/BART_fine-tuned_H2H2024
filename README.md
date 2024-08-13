@@ -25,7 +25,7 @@ ROUGE (Recall-Oriented Understudy for Gisting Evaluation)
   - Learning rate: 3e-4
   - Batch size: 8 (training), 4 (evaluation)
   - Weight decay: 0.01
-  - Number of epochs: 2
+  - Number of epochs: 10
   - Gradient accumulation steps: 4
   - Mixed precision training (fp16)
 
