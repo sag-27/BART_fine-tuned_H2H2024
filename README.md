@@ -86,7 +86,11 @@ To test the model performance, follow the following lines of code:
     ```sh
     tokenizer = BartTokenizer.from_pretrained("/kaggle/input/fine-tuned-bart")
     ```
-    
+
+## App Interface
+
+![image](https://github.com/user-attachments/assets/f4fbd7eb-f63d-4024-a45b-3b5436523710)
+
 ## Report
 
 The link to the detailed report can be found here - [`report`](https://github.com/sag-27/BART_fine-tuned_H2H2024/blob/main/Report.pdf)
